@@ -19,6 +19,14 @@ ENTRY = (
 OUTPUT_PATH = "/output/entry.txt"
 
 
+def _check_topic_words(text):
+    folded = text.casefold()
+    found = [term for term in ("agenda", "meeting", "calendar", "standup", "email") if term in folded]
+    if len(found) == 0:
+        raise ValueError("entry is missing a workplace-topic term")
+    return True
+
+
 def validate_entry(text):
     """Check the entry line: 1-200 chars, single line, non-whitespace."""
     if not isinstance(text, str):
@@ -31,6 +39,7 @@ def validate_entry(text):
         raise ValueError(
             "entry must be 1-200 chars, got %d" % len(text)
         )
+    _check_topic_words(text)
     return True
 
 
